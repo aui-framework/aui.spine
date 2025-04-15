@@ -23,12 +23,12 @@ MainWindow::MainWindow() : AWindow("spine-aui", 650_dp, 600_dp) {
     spine::Bone::setYDown(true);
 
     auto atlas = [] {
-        auto buffer = AByteBuffer::fromStream(":anim/assets/spineboy.atlas"_url.open());
-        return _new<spine::Atlas>(buffer.data(), buffer.size(), ":anim/assets", &ASpineView::TEXTURE_LOADER);
+        auto buffer = AByteBuffer::fromStream(":anim/spineboy.atlas"_url.open());
+        return _new<spine::Atlas>(buffer.data(), buffer.size(), ":anim", &ASpineView::TEXTURE_LOADER);
     }();
     static spine::SkeletonBinary binary(atlas.get());
     auto skeletonData = [&] {
-        auto buffer = AByteBuffer::fromStream(":anim/assets/spineboy-pro.skel"_url.open());
+        auto buffer = AByteBuffer::fromStream(":anim/spineboy-pro.skel"_url.open());
         return aui::ptr::manage(
             binary.readSkeletonData(reinterpret_cast<const unsigned char*>(buffer.data()), buffer.size()));
     }();
