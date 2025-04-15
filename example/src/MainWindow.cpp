@@ -1,6 +1,6 @@
 #include <range/v3/all.hpp>
 #include "MainWindow.h"
-#include "AUI/ASpineView.h"
+#include <AUI/Spine/ASpineView.h>
 #include <AUI/Util/UIBuildingHelpers.h>
 #include <AUI/View/ALabel.h>
 #include <AUI/View/AButton.h>

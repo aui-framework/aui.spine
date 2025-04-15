@@ -7,7 +7,7 @@ project(aui.spine
 option(BUILD_SHARED_LIBS "Build shared libs" OFF)
 option(AUI_SPINE_EXAMPLES "Build examples for aui.spine" OFF)
 option(SPINE_SET_COMPILER_FLAGS "Set compiler flags" OFF) # -fno-rtti breaks linking
-set(AUI_VERSION 6e84264e900611b30dc5b3aea244af83600db59e)
+set(AUI_VERSION 1c28c762b277002b3d3a46ffe67906f90bfc9c1d)
 set(AUI_SPINE_VERSION "e0755c485bc033169656d3cad134c89b9696aa2a" # 4.2
         CACHE STRING "Spine version used in aui.spine")
 
@@ -30,7 +30,7 @@ auib_import(spine https://github.com/aui-framework/spine-runtimes
 
 # Create the executable. This function automatically links all sources from the src/ folder,
 # creates CMake target and places the resulting executable to bin/ folder.
-aui_module(${PROJECT_NAME} EXPORT aui.spine)
+aui_module(${PROJECT_NAME} EXPORT spine)
 
 # Compile auisl shaders.
 auisl_shader(${PROJECT_NAME} spine.vsh)
@@ -43,8 +43,25 @@ if (AUI_SPINE_EXAMPLES)
     add_subdirectory(example)
 endif ()
 
+auib_precompiled_binary()
+
 if (NOT AUIB_AUI_AS)
-    export(EXPORT aui.spine
-            NAMESPACE aui::
+    # Install target
+    install(TARGETS ${PROJECT_NAME} EXPORT aui.spine DESTINATION lib)
+    install(EXPORT aui.spine DESTINATION "lib/cmake"
+            FILE aui.spine-targets.cmake)
+
+    include(CMakePackageConfigHelpers)
+    # generate the config file that includes the exports
+    configure_package_config_file(aui.spine-config.cmake.in
+            "${CMAKE_CURRENT_BINARY_DIR}/aui.spine-config.cmake"
+            INSTALL_DESTINATION "."
+            NO_SET_AND_CHECK_MACRO
+            NO_CHECK_REQUIRED_COMPONENTS_MACRO
+    )
+
+    install(FILES
+            ${CMAKE_CURRENT_BINARY_DIR}/aui.spine-config.cmake
+            DESTINATION "."
     )
 endif ()
