@@ -11,6 +11,7 @@
 #include <AUI/View/AGroupBox.h>
 #include <AUI/View/ASlider.h>
 #include <AUI/View/ARadioGroup.h>
+#include <AUI/View/ACheckBox.h>
 
 using namespace declarative;
 
@@ -83,6 +84,9 @@ MainWindow::MainWindow() : AWindow("spine-aui", 650_dp, 600_dp) {
                 Label { "1.0" },
               },
             },
+          },
+          CheckBoxWrapper { Label { "PMA rendering" } } with_style { Padding(8_dp) } let {
+              connect(it->checked(), slot(spineView)::setUsePma);
           },
           GroupBox {
             Label { "Background" },
