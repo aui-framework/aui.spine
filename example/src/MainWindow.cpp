@@ -10,6 +10,7 @@
 #include <AUI/View/AForEachUI.h>
 #include <AUI/View/AGroupBox.h>
 #include <AUI/View/ASlider.h>
+#include <AUI/View/ARadioGroup.h>
 
 using namespace declarative;
 
@@ -53,7 +54,9 @@ MainWindow::MainWindow() : AWindow("spine-aui", 650_dp, 600_dp) {
         it->animationState().addAnimation(0, "run", true, 0);
     };
 
+    auto backgroundLayer = _new<AView>() with_style { Expanding() };
     setContents(Stacked {
+      backgroundLayer,
       spineView,
       Label { "+" } with_style { FontRendering::NEAREST }, // anchor point 0,0
       Horizontal::Expanding {
@@ -81,11 +84,35 @@ MainWindow::MainWindow() : AWindow("spine-aui", 650_dp, 600_dp) {
               },
             },
           },
+          GroupBox {
+            Label { "Background" },
+            RadioGroup {
+              RadioButton { "white" },
+              RadioButton { "black" },
+              RadioButton { "art" },
+              RadioButton { "colorful" },
+            } let {
+                it->selectionId() = 0;
+                connect(it->selectionId(), [backgroundLayer](int i) {
+                     switch (i) {
+                         case 0:
+                             backgroundLayer->setCustomStyle({ BackgroundSolid(AColor::WHITE), Expanding(), });
+                             break;
+                         case 1:
+                             backgroundLayer->setCustomStyle({ BackgroundSolid(AColor::BLACK), Expanding(), });
+                             break;
+                         default:
+                             backgroundLayer->setCustomStyle({ BackgroundImage(":bg/{}.jpg"_format(i - 1), {}, {}, Sizing::CONTAIN), Expanding(), });
+                             break;
+                     }
+                });
+            }
+          },
         } with_style {
           MinSize { 150_dp },
           Backdrop { Backdrop::GaussianBlur { 30_dp } },
           BackgroundSolid { AColor::WHITE.transparentize(0.5f) },
         },
       },
-    });
+    } with_style { Padding(0) });
 }
