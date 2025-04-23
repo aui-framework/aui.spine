@@ -46,8 +46,8 @@ MainWindow::MainWindow() : AWindow("spine-aui", 650_dp, 600_dp) {
         // Set the skeleton's position to the center of
         // the screen and scale it to make it smaller.
         it->skeleton().setPosition(0, 0);
-        it->skeleton().setScaleX(0.5);
-        it->skeleton().setScaleY(0.5);
+        it->skeleton().setScaleX(0.9);
+        it->skeleton().setScaleY(0.9);
 
         // Create an AnimationState to drive animations on the skeleton. Set the "portal" animation
         // on track with index 0.
@@ -58,8 +58,14 @@ MainWindow::MainWindow() : AWindow("spine-aui", 650_dp, 600_dp) {
     auto backgroundLayer = _new<AView>() with_style { Expanding() };
     setContents(Stacked {
       backgroundLayer,
-      spineView,
-      Label { "+" } with_style { FontRendering::NEAREST }, // anchor point 0,0
+      spineView with_style {
+        FixedSize {
+          AMetric(skeletonData->getWidth(), AMetric::T_DP),
+          AMetric(skeletonData->getHeight(), AMetric::T_DP),
+        },
+        Border { 1_px, AColor::BLACK },
+      },
+      Label { "+" } with_style { FontRendering::NEAREST },   // anchor point 0,0
       Horizontal::Expanding {
         Vertical {
           GroupBox {

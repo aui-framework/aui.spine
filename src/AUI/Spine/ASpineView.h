@@ -12,6 +12,18 @@ public:
         void unload(void* texture) override;
     } TEXTURE_LOADER;
 
+    enum class Sizing {
+        /**
+         * @brief Scale the skeleton to fit the view.
+         */
+        UNIFORM,
+
+        /**
+         * @brief Do not apply any scaling.
+         */
+        AS_IS,
+    };
+
     ASpineView(
         _<spine::Atlas> atlas, _<spine::SkeletonData> skeletonData, _<spine::AnimationStateData> animationStateData);
     ~ASpineView() override;
@@ -39,6 +51,7 @@ public:
     spine::AnimationState& animationState() { return mAnimationState; }
 
     void setUsePma(bool usePma) { mUsePma = usePma; }
+    void setSizing(Sizing sizing) { mSizing = sizing; }
 
     void render(ARenderContext ctx) override;
 
@@ -46,6 +59,7 @@ private:
     _<spine::Atlas> mAtlas;
     _<spine::SkeletonData> mSkeletonData;
     _<spine::AnimationStateData> mAnimationStateData;
+    Sizing mSizing = Sizing::UNIFORM;
     spine::Skeleton mSkeleton;
     spine::AnimationState mAnimationState;
     AOptional<spine::SkeletonRenderer> mSkeletonRenderer;

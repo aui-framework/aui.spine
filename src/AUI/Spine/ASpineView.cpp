@@ -128,7 +128,6 @@ void ASpineView::render(ARenderContext ctx) {
 //    ALOG_DEBUG(LOG_TAG) << "Delta: " << delta;
     mStartTime = now;
 
-
     // Update and apply the animation state to the skeleton
     mAnimationState.update(delta);
     mAnimationState.apply(mSkeleton);
@@ -159,6 +158,12 @@ void ASpineView::render(ARenderContext ctx) {
         static_cast<gl::Texture2D*>(command->texture)->bind();
         auto mat = ctx.render.getTransform();
         mat = glm::translate(mat, glm::vec3(*size() / 2, 0.f));
+
+        if (mSizing == Sizing::UNIFORM) {
+            float scale = glm::min(size()->x / mSkeletonData->getWidth(), size()->y / mSkeletonData->getHeight()) * 0.5;
+            mat = glm::scale(mat, glm::vec3(scale, scale, 1.f));
+        }
+
         shader().set(aui::ShaderUniforms::TRANSFORM, mat);
         mImpl->vao.drawElements();
     }
