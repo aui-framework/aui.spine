@@ -38,6 +38,8 @@ public:
     [[nodiscard]]
     spine::AnimationState& animationState() { return mAnimationState; }
 
+    void setUsePma(bool usePma) { mUsePma = usePma; }
+
     void render(ARenderContext ctx) override;
 
 private:
@@ -47,6 +49,7 @@ private:
     spine::Skeleton mSkeleton;
     spine::AnimationState mAnimationState;
     AOptional<spine::SkeletonRenderer> mSkeletonRenderer;
+    bool mUsePma = false;
     struct Impl;
     aui::fast_pimpl<Impl, 128> mImpl;
     std::chrono::high_resolution_clock::time_point mStartTime = std::chrono::high_resolution_clock::now();

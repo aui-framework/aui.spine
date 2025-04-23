@@ -114,7 +114,6 @@ constexpr uint32_t remapColor(uint32_t color) {
 }
 
 void ASpineView::render(ARenderContext ctx) {
-    const bool premultipliedAlpha = false;
     AView::render(ctx);
 
     if (!mSkeletonRenderer) {
@@ -156,7 +155,7 @@ void ASpineView::render(ARenderContext ctx) {
         mImpl->vao.indices(AArrayView<uint16_t>(command->indices, command->numIndices));
 
         const auto blendMode = BLEND_MODES[command->blendMode];
-        glBlendFuncSeparate(premultipliedAlpha ? (GLenum) blendMode.source_color_pma : (GLenum) blendMode.source_color, (GLenum) blendMode.dest_color, (GLenum) blendMode.source_alpha, (GLenum) blendMode.dest_color);
+        glBlendFuncSeparate(mUsePma ? (GLenum) blendMode.source_color_pma : (GLenum) blendMode.source_color, (GLenum) blendMode.dest_color, (GLenum) blendMode.source_alpha, (GLenum) blendMode.dest_color);
         static_cast<gl::Texture2D*>(command->texture)->bind();
         auto mat = ctx.render.getTransform();
         mat = glm::translate(mat, glm::vec3(*size() / 2, 0.f));
