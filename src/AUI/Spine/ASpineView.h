@@ -3,6 +3,7 @@
 #include <spine/spine.h>
 #include <AUI/View/AView.h>
 #include <AUI/Util/APimpl.h>
+#include "SkeletonRenderer.h"
 
 class ASpineView : public AView {
 public:
@@ -28,11 +29,11 @@ public:
         _<spine::Atlas> atlas, _<spine::SkeletonData> skeletonData, _<spine::AnimationStateData> animationStateData);
     ~ASpineView() override;
 
-    void update(float delta, spine::Physics physics) {
+    void update(float delta) {
         mAnimationState.update(delta);
         mAnimationState.apply(mSkeleton);
         mSkeleton.update(delta);
-        mSkeleton.updateWorldTransform(physics);
+        mSkeleton.updateWorldTransform();
     }
 
     [[nodiscard]]

@@ -136,8 +136,7 @@ void ASpineView::render(ARenderContext ctx) {
     mSkeleton.update(delta);
 
     // Calculate the new pose
-    mSkeleton.updateWorldTransform(spine::Physics_Update);
-
+    mSkeleton.updateWorldTransform();
 
     for (auto command = mSkeletonRenderer->render(mSkeleton); command != nullptr; command = command->next) {
         mImpl->cpuVertexBuffer.clear(); // performance hint: won't release the memory.
@@ -172,6 +171,30 @@ void ASpineView::render(ARenderContext ctx) {
     redraw();
 }
 
+static GLint parseFilter(spine::TextureFilter filter) {
+    switch (filter) {
+        case spine::TextureFilter_Nearest:
+            return GL_NEAREST;
+
+        default:
+            return GL_LINEAR;
+    }
+}
+
+static GLint parseWrap(spine::TextureWrap wrap) {
+    switch (wrap) {
+        default:
+        case spine::TextureWrap_ClampToEdge:
+            return GL_CLAMP_TO_EDGE;
+
+        case spine::TextureWrap_Repeat:
+            return GL_REPEAT;
+
+        case spine::TextureWrap_MirroredRepeat:
+            return GL_MIRRORED_REPEAT;
+    }
+}
+
 void ASpineView::TextureLoader::load(spine::AtlasPage &page, const spine::String &path) {
     auto image = AImage::fromUrl(path.buffer());
     if (!image) {
@@ -180,12 +203,15 @@ void ASpineView::TextureLoader::load(spine::AtlasPage &page, const spine::String
     auto texture = new gl::Texture2D;
     texture->tex2D(*image);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, parseFilter(page.minFilter));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, parseFilter(page.magFilter));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, parseWrap(page.uWrap));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, parseWrap(page.vWrap));
 
-    page.texture = texture;
+    page.width = image->width();
+    page.height = image->height();
+
+    page.setRendererObject(texture);
 }
 
 void ASpineView::TextureLoader::unload(void *texture) {
