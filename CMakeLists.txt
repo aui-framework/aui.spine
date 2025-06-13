@@ -1,13 +1,13 @@
 # Standard routine
 cmake_minimum_required(VERSION 3.16)
 project(aui.spine
-        VERSION 0.0.10 # CI_PROJECT_VERSION
+        VERSION 0.0.11 # CI_PROJECT_VERSION
     )
 
 option(BUILD_SHARED_LIBS "Build shared libs" OFF)
 option(AUI_SPINE_EXAMPLES "Build examples for aui.spine" OFF)
 option(SPINE_SET_COMPILER_FLAGS "Set compiler flags" OFF) # -fno-rtti breaks linking
-set(AUI_VERSION v8.0.0-rc.4)
+set(AUI_VERSION v8.0.0-rc.5)
 set(AUI_SPINE_VERSION "f5754dcc4070463caaf7339e2feb3ca22e3cd861" # 3.8
         CACHE STRING "Spine version used in aui.spine")
 

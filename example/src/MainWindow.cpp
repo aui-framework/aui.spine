@@ -91,8 +91,8 @@ void MainWindow::loadFile(const APath& path) {
                 _new<AFileChooserView>(
                     path,
                     AVector<ADesktop::FileExtension> {
-                      { "Spine atlas", "*.atlas" },
-                      { "Spine skel", "*.skel" },
+                      { "Spine atlas", "atlas" },
+                      { "Spine skel", "skel" },
                       { "All", "*" },
                     }) let {
                         it->path() = path;
