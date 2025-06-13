@@ -6,4 +6,6 @@ class MainWindow: public AWindow {
 public:
     MainWindow();
 
+private:
+    void loadFile(const APath& path);
 };
