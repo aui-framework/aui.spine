@@ -65,3 +65,5 @@ if (NOT AUIB_AUI_AS)
             DESTINATION "."
     )
 endif ()
+
+aui_enable_tests(${PROJECT_NAME})
