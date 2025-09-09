@@ -69,7 +69,7 @@ inline void useAuislShader(AOptional<gl::Program>& out) {
 
 static gl::Program& shader() {
     static AOptional<gl::Program> program;
-    do_once {
+    AUI_DO_ONCE {
         useAuislShader<aui::sl_gen::spine::vsh::glsl120::Shader, aui::sl_gen::spine::fsh::glsl120::Shader>(program);
     };
     return *program;
