@@ -45,7 +45,7 @@ void MainWindow::loadFile(const APath& path) {
             AUrl url = path.substr(0, path.rfind('.')) + ".skel";
             // auto buffer = AByteBuffer::fromStream(":anim/spineboy.skel"_url.open());
             auto buffer = AByteBuffer::fromStream(url.open());
-            return aui::ptr::manage(
+            return aui::ptr::manage_shared(
                 binary->readSkeletonData(reinterpret_cast<const unsigned char*>(buffer.data()), buffer.size()));
         }();
         if (!binary->getError().isEmpty()) {
@@ -56,7 +56,7 @@ void MainWindow::loadFile(const APath& path) {
         auto animations = asSpan(animationStateData->getSkeletonData()->getAnimations());
         animationStateData->setDefaultMix(0.2f);
 
-        auto spineView = _new<ASpineView>(atlas, skeletonData, animationStateData) with_style { Expanding() } let {
+        auto spineView = _new<ASpineView>(atlas, skeletonData, animationStateData) AUI_WITH_STYLE { Expanding() } AUI_LET {
             // Set the skeleton's position to the center of
             // the screen and scale it to make it smaller.
             it->skeleton().setPosition(0, 0);
@@ -73,17 +73,17 @@ void MainWindow::loadFile(const APath& path) {
             }
         };
 
-        auto backgroundLayer = _new<AView>() with_style { Expanding() };
+        auto backgroundLayer = _new<AView>() AUI_WITH_STYLE { Expanding() };
         setContents(Stacked {
           backgroundLayer,
-          spineView with_style {
+          spineView AUI_WITH_STYLE {
             FixedSize {
               AMetric(skeletonData->getWidth(), AMetric::T_DP),
               AMetric(skeletonData->getHeight(), AMetric::T_DP),
             },
             Border { 1_px, AColor::BLACK },
           },
-          Label { "+" } with_style { FontRendering::NEAREST },   // anchor point 0,0
+          Label { "+" } AUI_WITH_STYLE { FontRendering::NEAREST },   // anchor point 0,0
           Horizontal::Expanding {
             Vertical {
               GroupBox {
@@ -94,7 +94,7 @@ void MainWindow::loadFile(const APath& path) {
                       { "Spine atlas", "atlas" },
                       { "Spine skel", "skel" },
                       { "All", "*" },
-                    }) let {
+                    }) AUI_LET {
                         it->path() = path;
                         connect(it->path().changed, me::loadFile);
                     },
@@ -111,7 +111,7 @@ void MainWindow::loadFile(const APath& path) {
               GroupBox {
                 Label { "Mixing" },
                 Vertical {
-                  _new<ASlider>() let {
+                  _new<ASlider>() AUI_LET {
                           it->value() = 0.2f;
                           connect(it->value(), [animationStateData](float v) { animationStateData->setDefaultMix(v); });
                       },
@@ -122,7 +122,7 @@ void MainWindow::loadFile(const APath& path) {
                   },
                 },
               },
-              CheckBoxWrapper { Label { "PMA rendering" } } with_style { Padding(8_dp) } let { connect(it->checked(), slot(spineView)::setUsePma); },
+              CheckBoxWrapper { Label { "PMA rendering" } } AUI_WITH_STYLE { Padding(8_dp) } AUI_LET { connect(it->checked(), AUI_SLOT(spineView)::setUsePma); },
               GroupBox {
                 Label { "Background" },
                 RadioGroup {
@@ -130,7 +130,7 @@ void MainWindow::loadFile(const APath& path) {
                   RadioButton { "black" },
                   RadioButton { "art" },
                   RadioButton { "colorful" },
-                } let {
+                } AUI_LET {
                         it->selectionId() = 0;
                         connect(it->selectionId(), [backgroundLayer](int i) {
                             switch (i) {
@@ -155,13 +155,13 @@ void MainWindow::loadFile(const APath& path) {
                             }
                         });
                     } },
-            } with_style {
+            } AUI_WITH_STYLE {
               MinSize { 150_dp },
               Backdrop { Backdrop::GaussianBlur { 30_dp } },
               BackgroundSolid { AColor::WHITE.transparentize(0.5f) },
             },
           },
-        } with_style { Padding(0) });
+        } AUI_WITH_STYLE { Padding(0) });
     } catch (const AException& e) {
         AMessageBox::show(nullptr, "Can't open file", e.getMessage());
     }
