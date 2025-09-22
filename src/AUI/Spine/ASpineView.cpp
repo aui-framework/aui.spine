@@ -61,7 +61,7 @@ static constexpr BlendMode BLEND_MODES[] = {
 template<typename Vertex, typename Fragment>
 inline void useAuislShader(AOptional<gl::Program>& out) {
     out.emplace();
-    out->loadRaw(Vertex::code(), Fragment::code());
+    out->loadBoth(Vertex::code(), Fragment::code());
     Vertex::setup(out->handle());
     Fragment::setup(out->handle());
     out->compile();
