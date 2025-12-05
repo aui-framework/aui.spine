@@ -1,4 +1,6 @@
 #include "ASpineView.h"
+
+#include "AUI/GL/Texture2D.h"
 #include "AUISL/Generated/spine.vsh.glsl120.h"
 #include "AUISL/Generated/spine.fsh.glsl120.h"
 #include <AUI/Render/IRenderer.h>

@@ -56,7 +56,7 @@ void MainWindow::loadFile(const APath& path) {
         auto animations = asSpan(animationStateData->getSkeletonData()->getAnimations());
         animationStateData->setDefaultMix(0.2f);
 
-        auto spineView = _new<ASpineView>(atlas, skeletonData, animationStateData) AUI_WITH_STYLE { Expanding() } AUI_LET {
+        auto spineView = _new<ASpineView>(atlas, skeletonData, animationStateData) AUI_OVERRIDE_STYLE { Expanding() } AUI_LET {
             // Set the skeleton's position to the center of
             // the screen and scale it to make it smaller.
             it->skeleton().setPosition(0, 0);
@@ -73,17 +73,17 @@ void MainWindow::loadFile(const APath& path) {
             }
         };
 
-        auto backgroundLayer = _new<AView>() AUI_WITH_STYLE { Expanding() };
+        auto backgroundLayer = _new<AView>() AUI_OVERRIDE_STYLE { Expanding() };
         setContents(Stacked {
           backgroundLayer,
-          spineView AUI_WITH_STYLE {
+          spineView AUI_OVERRIDE_STYLE {
             FixedSize {
               AMetric(skeletonData->getWidth(), AMetric::T_DP),
               AMetric(skeletonData->getHeight(), AMetric::T_DP),
             },
             Border { 1_px, AColor::BLACK },
           },
-          Label { "+" } AUI_WITH_STYLE { FontRendering::NEAREST },   // anchor point 0,0
+          Label { "+" } AUI_OVERRIDE_STYLE { FontRendering::NEAREST },   // anchor point 0,0
           Horizontal::Expanding {
             Vertical {
               GroupBox {
@@ -122,7 +122,7 @@ void MainWindow::loadFile(const APath& path) {
                   },
                 },
               },
-              CheckBoxWrapper { Label { "PMA rendering" } } AUI_WITH_STYLE { Padding(8_dp) } AUI_LET { connect(it->checked(), AUI_SLOT(spineView)::setUsePma); },
+              CheckBoxWrapper { Label { "PMA rendering" } } AUI_OVERRIDE_STYLE { Padding(8_dp) } AUI_LET { connect(it->checked(), AUI_SLOT(spineView)::setUsePma); },
               GroupBox {
                 Label { "Background" },
                 RadioGroup {
@@ -155,13 +155,13 @@ void MainWindow::loadFile(const APath& path) {
                             }
                         });
                     } },
-            } AUI_WITH_STYLE {
+            } AUI_OVERRIDE_STYLE {
               MinSize { 150_dp },
               Backdrop { Backdrop::GaussianBlur { 30_dp } },
               BackgroundSolid { AColor::WHITE.transparentize(0.5f) },
             },
           },
-        } AUI_WITH_STYLE { Padding(0) });
+        } AUI_OVERRIDE_STYLE { Padding(0) });
     } catch (const AException& e) {
         AMessageBox::show(nullptr, "Can't open file", e.getMessage());
     }
