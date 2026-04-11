@@ -7,7 +7,7 @@ project(aui.spine
 option(BUILD_SHARED_LIBS "Build shared libs" OFF)
 option(AUI_SPINE_EXAMPLES "Build examples for aui.spine" OFF)
 option(SPINE_SET_COMPILER_FLAGS "Set compiler flags" OFF) # -fno-rtti breaks linking
-set(AUI_VERSION 6675a24bce882cf68b43f6cd16f6d0b9b0a1bce6)
+set(AUI_VERSION e2ebbab103a79e29e29314461e3fd5b67b288caa)
 set(AUI_SPINE_VERSION "f5754dcc4070463caaf7339e2feb3ca22e3cd861" # 3.8
         CACHE STRING "Spine version used in aui.spine")
 
