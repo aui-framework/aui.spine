@@ -56,6 +56,14 @@ public:
 
     void render(ARenderContext ctx) override;
 
+
+
+
+
+
+
+
+
 private:
     _<spine::Atlas> mAtlas;
     _<spine::SkeletonData> mSkeletonData;
